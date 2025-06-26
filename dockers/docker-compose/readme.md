@@ -1,0 +1,1 @@
+This is example for docker compose with HAproxy , webbackend api and postgresql db server
