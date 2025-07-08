@@ -1,39 +1,38 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name:  nginx
---- 
+  name: nginx
+---
 apiVersion: apps/v1
-kind: Deployment 
+kind: Deployment
 metadata:
-  namespace: nginx 
+  namespace: nginx
   name: nginx-deployment
   labels:
     app: nginx_haproxy
-    important: "true" 
-spec: 
-  replicas: 3 #default 1 #this will be overwrite if have HPA ref to
-  selector: 
+    important: "true"
+spec:
+  replicas: 20 #default 1 #this will be overwrite if have HPA ref to
+  selector:
     matchLabels:
       app: nginx_haproxy
   template:
     metadata:
       labels: #label marker to identifier the deployment references
         app: nginx_haproxy
-    spec:   
+    spec:
       containers:
-          - image: busybox
-            name:  my-alpin
-            command: ["/bin/sh", "-c", "while true; do wget -q -O- http://nginx-service; done && sleep 3600"]
-            ports:
-              - containerPort: 8080
-            resources:
-              limits: 
-                memory: 512Mi
-                cpu: 128m
-              requests: 
-                memory: 512Mi
-                cpu: 128m
-            env:
-              - name:  HELLO 
-                value:  "HOW ARE YOU"
+        - image: nginx:latest
+          name: my-alpin
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 256m
+            requests:
+              memory: 512Mi
+              cpu: 256m
+          env:
+            - name: HELLO
+              value: "HOW ARE YOU"

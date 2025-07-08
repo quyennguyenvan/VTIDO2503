@@ -1,0 +1,141 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2025-07-08T12:59:51Z"
+  generateName: nginx-replicas-
+  labels:
+    app: nginx-replicas
+    app_kind: backend_api
+  name: nginx-replicas-v9txt
+  namespace: nginx
+  ownerReferences:
+  - apiVersion: apps/v1
+    blockOwnerDeletion: true
+    controller: true
+    kind: ReplicaSet
+    name: nginx-replicas
+    uid: a238ad79-e64c-419c-8324-7011d62d8172
+  resourceVersion: "486961"
+  uid: 62dc9a3c-f9b7-4a85-a9f7-12f882d40818
+spec:
+  containers:
+  - env:
+    - name: HELLO
+      value: HOW ARE YOU
+    image: busybox:latest
+    imagePullPolicy: Always
+    name: my-alpin
+    ports:
+    - containerPort: 8080
+      protocol: TCP
+    resources:
+      limits:
+        cpu: 256m
+        memory: 512Mi
+      requests:
+        cpu: 256m
+        memory: 512Mi
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-pbh6g
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: docker-desktop
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-pbh6g
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2025-07-08T12:59:57Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2025-07-08T12:59:51Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2025-07-08T12:59:51Z"
+    message: 'containers with unready status: [my-alpin]'
+    reason: ContainersNotReady
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2025-07-08T12:59:51Z"
+    message: 'containers with unready status: [my-alpin]'
+    reason: ContainersNotReady
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2025-07-08T12:59:51Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: docker://f8ef1d7c05bc261ef4463ac0531cadb0f15d08fd5a5c136c96f0947eff960e37
+    image: busybox:latest
+    imageID: docker-pullable://busybox@sha256:f85340bf132ae937d2c2a763b8335c9bab35d6e8293f70f606b9c6178d84f42b
+    lastState:
+      terminated:
+        containerID: docker://f8ef1d7c05bc261ef4463ac0531cadb0f15d08fd5a5c136c96f0947eff960e37
+        exitCode: 0
+        finishedAt: "2025-07-08T13:00:04Z"
+        reason: Completed
+        startedAt: "2025-07-08T13:00:04Z"
+    name: my-alpin
+    ready: false
+    restartCount: 1
+    started: false
+    state:
+      waiting:
+        message: back-off 10s restarting failed container=my-alpin pod=nginx-replicas-v9txt_nginx(62dc9a3c-f9b7-4a85-a9f7-12f882d40818)
+        reason: CrashLoopBackOff
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-pbh6g
+      readOnly: true
+      recursiveReadOnly: Disabled
+  hostIP: 192.168.65.3
+  hostIPs:
+  - ip: 192.168.65.3
+  phase: Running
+  podIP: 10.1.0.158
+  podIPs:
+  - ip: 10.1.0.158
+  qosClass: Guaranteed
+  startTime: "2025-07-08T12:59:51Z"
