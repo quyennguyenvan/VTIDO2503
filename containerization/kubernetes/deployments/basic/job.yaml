@@ -1,0 +1,20 @@
+
+apiVersion: batch/v1 
+kind: Job 
+metadata:
+  name: hellojob 
+  namespace: default 
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished:  120
+  template: 
+    spec: 
+      containers:
+        - name: hello
+          image: "ubuntu:14.04"
+          env:
+          - name: MESSAGE
+            value: "hello world"
+          command: ["/bin/sh","-c"]
+          args: ["/bin/echo \"${MESSAGE}\""]
+      restartPolicy: Never

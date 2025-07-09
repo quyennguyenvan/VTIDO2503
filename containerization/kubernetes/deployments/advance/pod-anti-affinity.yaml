@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-haproxy
+  labels:
+    app: nginx-haproxy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-haproxy
+  template:
+    metadata:
+      labels:
+        app: nginx-haproxy
+    spec:
+      affinity:
+        podAntiAffinity:
+          #hard rule
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - nginx-haproxy
+              topologyKey: "kubernetes.io/hostname"
+
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - web
+                topologyKey: "kubernetes.io/hostname"
+
+      containers:
+        - name: random
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 256m
+            requests:
+              memory: 512Mi
+              cpu: 256m
+          env:
+            - name: HELLO
+              value: "HOW ARE YOU"

@@ -1,0 +1,9 @@
+| Feature              | `nodeAffinity`                                                      | `podAffinity`                                                   | `podAntiAffinity`                                     |
+| -------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------- |
+| **Targets**          | **Node labels**                                                     | **Other Pods' labels**                                          | **Other Pods' labels**                                |
+| **Goal**             | Schedule Pod to specific nodes                                      | Co-locate Pod with similar Pods                                 | **Avoid** co-locating with specific Pods              |
+| **Based on**         | Node label match                                                    | Pod label match **on same topology**                            | Pod label match **to avoid same topology**            |
+| **Common use cases** | - Separate workloads <br> - Deploy to specific node groups or zones | - Ensure Pods run on same host/zone <br> - Low-latency services | - Spread Pods for HA <br> - Avoid resource contention |
+| **Field**            | `.spec.affinity.nodeAffinity`                                       | `.spec.affinity.podAffinity`                                    | `.spec.affinity.podAntiAffinity`                      |
+| **Hard or Soft?**    | ✅ Hard (`required`) <br> ☑️ Soft (`preferred`)                       | ✅ Hard and ☑️ Soft                                               | ✅ Hard and ☑️ Soft                                     |
+| **Topology key**     | ❌ Not needed (uses node labels directly)                            | ✅ Required (e.g., `kubernetes.io/hostname`, zone)               | ✅ Required (same as `podAffinity`)                    |

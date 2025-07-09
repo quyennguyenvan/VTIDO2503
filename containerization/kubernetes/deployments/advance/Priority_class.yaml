@@ -1,0 +1,40 @@
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+#Higher number = higher priority
+value: 100000
+preemptionPolicy: PreemptLowerPriority
+globalDefault: false
+description: "This priority class is for critical workloads."
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: critical-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: critical
+  template:
+    metadata:
+      labels:
+        app: critical
+    spec:
+      priorityClassName: high-priority
+      containers:
+        - name: random
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 256m
+            requests:
+              memory: 512Mi
+              cpu: 256m
+          env:
+            - name: HELLO
+              value: "HOW ARE YOU"

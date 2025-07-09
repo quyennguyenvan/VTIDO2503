@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-server
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "topology.kubernetes.io/zone"
+          whenUnsatisfiable: DoNotSchedule
+          # Apply the rule only to Pods wit
+          labelSelector:
+            matchLabels:
+              app: web
+      containers:
+        - name: random
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 256m
+            requests:
+              memory: 512Mi
+              cpu: 256m
+          env:
+            - name: HELLO
+              value: "HOW ARE YOU"

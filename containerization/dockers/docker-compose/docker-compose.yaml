@@ -1,0 +1,48 @@
+services:
+  webhaproxy: 
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - backendapi
+    
+  api: 
+    build: ./webapp
+    ports: 
+      - "5000"
+    environment:
+      - DATABASE_URL=postgresql://test:123abcD@database:5432/mydb
+    volumes:
+      - applogs:/var/logs
+    depends_on:
+      - database
+    deploy:
+      replicas: 3
+    networks:
+      - backendapi
+      - appdatabase
+  
+  database:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=123abcD
+      - POSTGRES_DB=mydb 
+    networks:
+      - appdatabase
+    
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  applogs:
+  pgdata: 
+
+networks:
+  backendapi:
+  appdatabase:

@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: nginx
+  name: nginx-deployment
+  labels:
+    app: nginx_haproxy
+    important: "true"
+spec:
+  replicas: 20 #default 1 #this will be overwrite if have HPA ref to
+  selector:
+    matchLabels:
+      app: nginx_haproxy
+  template:
+    metadata:
+      labels: #label marker to identifier the deployment references
+        app: nginx_haproxy
+    spec:
+      containers:
+        - image: nginx:latest
+          name: my-alpin
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 256m
+            requests:
+              memory: 512Mi
+              cpu: 256m
+          env:
+            - name: HELLO
+              value: "HOW ARE YOU"

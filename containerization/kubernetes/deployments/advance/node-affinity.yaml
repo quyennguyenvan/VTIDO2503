@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-haproxy
+  labels:
+    app: nginx-haproxy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-haproxy
+  template:
+    metadata:
+      labels:
+        app: nginx-haproxy
+    spec:
+      affinity:
+        nodeAffinity:
+          #hard rule
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In
+                    values:
+                      - arm-nodes
+          #soft rule
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                  - key: eks.amazonaws.com/nodegroup
+                    operator: In
+                    values:
+                      - arm-nodes
+
+      containers:
+        - name: random
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 256m
+            requests:
+              memory: 512Mi
+              cpu: 256m
+          env:
+            - name: HELLO
+              value: "HOW ARE YOU"

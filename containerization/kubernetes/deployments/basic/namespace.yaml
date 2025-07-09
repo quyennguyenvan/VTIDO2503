@@ -1,0 +1,4 @@
+apiVersion: v1 #version of API - current supporting
+kind: Namespace # kind of resources
+metadata: # describe information or data of resources
+  name: hihi
