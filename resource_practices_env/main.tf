@@ -55,6 +55,7 @@ module "eks" {
 #CALLING MODULE EC2 TO CREATE THE EC2 INSTANCE 
 
 module "ec2" {
+  # count = 0
   depends_on = [
     module.vpc
   ]
@@ -82,6 +83,7 @@ module "ec2" {
 
 #CALLING MODULE API GATEWAY
 module "apigateway" {
+  # count                                = 0
   source                               = "./_modules/apigateway"
   for_each                             = var.api_gateways
   aws_api_gateway_rest_api_name        = each.value.aws_api_gateway_rest_api_name

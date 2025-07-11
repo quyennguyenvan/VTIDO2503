@@ -16,7 +16,7 @@ def index():
         cursor.execute("SELECT version();")
         db_version = cursor.fetchone()
         cursor.close()
-        return f"database connection: {db_version}"
+        return f"database connection: {db_version}, hostname: {server_id}"
     except Exception as err: 
         print(f"Throw execptions as: {err}")
         pass
