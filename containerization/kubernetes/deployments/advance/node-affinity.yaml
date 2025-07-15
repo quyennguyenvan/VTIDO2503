@@ -1,11 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: nginx
   name: nginx-haproxy
   labels:
     app: nginx-haproxy
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: nginx-haproxy
@@ -16,24 +17,36 @@ spec:
     spec:
       affinity:
         nodeAffinity:
-          #hard rule
+          # hard rule
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                  - key: eks.amazonaws.com/nodegroup
+                  - key: topology.kubernetes.io/zone
                     operator: In
                     values:
-                      - arm-nodes
-          #soft rule
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
-                  - key: eks.amazonaws.com/nodegroup
+                      - ap-southeast-1d
+                  - key: kubernetes.io/hostname
                     operator: In
                     values:
-                      - arm-nodes
+                      - ip-10-0-1-226.ap-southeast-1.compute.internal
+                      - ip-10-0-14-124.ap-southeast-1.compute.internal
 
+          #soft rule
+          # preferredDuringSchedulingIgnoredDuringExecution:
+          #   - weight: 80
+          #     preference:
+          #       matchExpressions:
+          #         - key: topology.kubernetes.io/zone
+          #           operator: In
+          #           values:
+          #             - ap-southeast-1d
+          #   - weight: 20
+          #     preference:
+          #       matchExpressions:
+          #         - key: topology.kubernetes.io/zone
+          #           operator: In
+          #           values:
+          #             - ap-southeast-1b
       containers:
         - name: random
           image: nginx:latest

@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: nginx
   name: nginx-haproxy
   labels:
     app: nginx-haproxy
@@ -17,17 +18,26 @@ spec:
       affinity:
         podAffinity:
           #hard rule
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - nginx-haproxy
-              topologyKey: "kubernetes.io/hostname"
+          # requiredDuringSchedulingIgnoredDuringExecution:
+          #   - labelSelector:
+          #       matchExpressions:
+          #         - key: app
+          #           operator: In
+          #           values:
+          #             - nginx-haproxy
+          #     topologyKey: "kubernetes.io/hostname"
 
           preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
+            - weight: 80
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - nginx-haproxy
+                topologyKey: "kubernetes.io/hostname"
+            - weight: 20
               podAffinityTerm:
                 labelSelector:
                   matchExpressions:

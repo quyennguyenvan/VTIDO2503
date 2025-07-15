@@ -1,18 +1,19 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: nginx
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: nginx
+# ---
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: nginx
+  namespace: default
   name: nginx-deployment
   labels:
     app: nginx_haproxy
     important: "true"
 spec:
-  replicas: 20 #default 1 #this will be overwrite if have HPA ref to
+  replicas: 5 #default 1 #this will be overwrite if have HPA ref to
   selector:
     matchLabels:
       app: nginx_haproxy

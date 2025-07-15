@@ -54,54 +54,54 @@ module "eks" {
 
 #CALLING MODULE EC2 TO CREATE THE EC2 INSTANCE 
 
-module "ec2" {
-  # count = 0
-  depends_on = [
-    module.vpc
-  ]
-  source                      = "./_modules/ec2"
-  for_each                    = var.bastion_definition
-  vpc_id                      = module.vpc.vpc_id
-  bastion_instance_class      = each.value.bastion_instance_class
-  bastion_name                = each.value.bastion_name
-  bastion_public_key          = each.value.bastion_public_key
-  trusted_ips                 = toset(each.value.trusted_ips)
-  user_data_base64            = each.value.user_data_base64
-  bastion_ami                 = each.value.bastion_ami
-  associate_public_ip_address = each.value.associate_public_ip_address
-  public_subnet_id            = module.vpc.vpc_public_subnet_ids[random_integer.this.result]
-  bastion_monitoring          = each.value.bastion_monitoring
-  default_tags = merge(
-    var.default_tags,
-    each.value.ext-tags,
-    {
-      "ext-env" : terraform.workspace
-    }
-  )
+# module "ec2" {
+#   # count = 0
+#   depends_on = [
+#     module.vpc
+#   ]
+#   source                      = "./_modules/ec2"
+#   for_each                    = var.bastion_definition
+#   vpc_id                      = module.vpc.vpc_id
+#   bastion_instance_class      = each.value.bastion_instance_class
+#   bastion_name                = each.value.bastion_name
+#   bastion_public_key          = each.value.bastion_public_key
+#   trusted_ips                 = toset(each.value.trusted_ips)
+#   user_data_base64            = each.value.user_data_base64
+#   bastion_ami                 = each.value.bastion_ami
+#   associate_public_ip_address = each.value.associate_public_ip_address
+#   public_subnet_id            = module.vpc.vpc_public_subnet_ids[random_integer.this.result]
+#   bastion_monitoring          = each.value.bastion_monitoring
+#   default_tags = merge(
+#     var.default_tags,
+#     each.value.ext-tags,
+#     {
+#       "ext-env" : terraform.workspace
+#     }
+#   )
 
-}
+# }
 
 #CALLING MODULE API GATEWAY
-module "apigateway" {
-  # count                                = 0
-  source                               = "./_modules/apigateway"
-  for_each                             = var.api_gateways
-  aws_api_gateway_rest_api_name        = each.value.aws_api_gateway_rest_api_name
-  aws_api_gateway_rest_api_description = each.value.aws_api_gateway_rest_api_description
-  api_gateway_protocol                 = each.value.api_gateway_protocol
-  create_domain_name                   = each.value.create_domain_name
-  authorizers                          = each.value.authorizers
-  routes                               = each.value.routes
-  allow_methods                        = each.value.allow_methods
-  allow_headers                        = each.value.allow_headers
-  allow_origins                        = each.value.allow_origins
-  fail_on_warnings                     = each.value.fail_on_warnings
+# module "apigateway" {
+#   # count                                = 0
+#   source                               = "./_modules/apigateway"
+#   for_each                             = var.api_gateways
+#   aws_api_gateway_rest_api_name        = each.value.aws_api_gateway_rest_api_name
+#   aws_api_gateway_rest_api_description = each.value.aws_api_gateway_rest_api_description
+#   api_gateway_protocol                 = each.value.api_gateway_protocol
+#   create_domain_name                   = each.value.create_domain_name
+#   authorizers                          = each.value.authorizers
+#   routes                               = each.value.routes
+#   allow_methods                        = each.value.allow_methods
+#   allow_headers                        = each.value.allow_headers
+#   allow_origins                        = each.value.allow_origins
+#   fail_on_warnings                     = each.value.fail_on_warnings
 
-  tags = merge(
-    var.default_tags,
-    each.value.ext-tags,
-    {
-      "ext-env" : terraform.workspace
-    }
-  )
-}
+#   tags = merge(
+#     var.default_tags,
+#     each.value.ext-tags,
+#     {
+#       "ext-env" : terraform.workspace
+#     }
+#   )
+# }

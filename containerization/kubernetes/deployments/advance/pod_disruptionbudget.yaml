@@ -1,9 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: nginx
   name: web
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: web
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
         - name: random
-          image: nginx:latest
+          image: nginx:latest #from v12.1 to latest
           ports:
             - containerPort: 80
           resources:
@@ -31,9 +32,24 @@ spec:
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: web-pdb
+  name: web-pdb-min-avai
+  namespace: nginx
 spec:
-  maxUnavailable: 1
+  minAvailable: 1
+  # maxUnavailable: 2
+  #Must match the same labels as your Deployment/StatefulSet
+  selector:
+    matchLabels:
+      app: web
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: web-pdb-max-unav
+  namespace: nginx
+spec:
+  # minAvailable: 1
+  maxUnavailable: 2
   #Must match the same labels as your Deployment/StatefulSet
   selector:
     matchLabels:

@@ -1,0 +1,86 @@
+[
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000047"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000051"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000065"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000068"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000069"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000085"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000087"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000088"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000089"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000090"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000091"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000092"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000093"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000094"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000096"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000098"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/DE000100"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/kevin"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/quyennv_resources_control"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/sameple-mfa-test"
+    },
+    {
+        "Username": null,
+        "ARN": "arn:aws:iam::616293267995:user/tf-devops-infra"
+    }
+]
