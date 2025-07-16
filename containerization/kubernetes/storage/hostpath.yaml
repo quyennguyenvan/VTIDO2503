@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-hostpath
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    resources:
+      requests: 
+        cpu: 256m
+        memory: 512Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
+    volumeMounts:
+    - mountPath: "/data"
+      name: host-volume
+  volumes:
+  - name: host-volume
+    hostPath:
+      path: "/Users/nulled/OneDrive/Projects/VTI/demo/kuberentes/storages/tmp"
+      type: Directory # Ensures the path is a directory

@@ -1,0 +1,37 @@
+# PersistentVolumeClaim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+# Pod using the PVC
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-container
+    image: nginx
+    resources:
+      requests:
+        cpu: 256m
+        memory: 512Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
+    volumeMounts:
+    - mountPath: "/data"
+      name: my-volume
+  volumes:
+  - name: my-volume
+    persistentVolumeClaim:
+      claimName: my-pvc

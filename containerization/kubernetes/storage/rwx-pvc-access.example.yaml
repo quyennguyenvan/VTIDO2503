@@ -1,0 +1,52 @@
+# PersistentVolume (PV)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-rwx
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  nfs:
+    server: 192.168.1.100
+    path: "/exports"
+---
+# PersistentVolumeClaim (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-rwx
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
+# Pod using the PVC
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-rwx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    resources:
+      requests:
+        cpu: 256m
+        memory: 512Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
+    volumeMounts:
+    - mountPath: "/var/www"
+      name: rwx-volume
+  volumes:
+  - name: rwx-volume
+    persistentVolumeClaim:
+      claimName: pvc-rwx

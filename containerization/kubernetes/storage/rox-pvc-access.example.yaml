@@ -1,0 +1,91 @@
+# PersistentVolume (PV)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-rox
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: default
+  hostPath:
+    path: "/Users/nulled/OneDrive/Projects/VTI/demo/kuberentes/storages/tmp"
+---
+# PersistentVolumeClaim (PVC)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-rox
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: default
+---
+ # Pod using the PVC
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-rwo-1
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    supplementalGroups: [4000]
+  containers:
+  - name: nginx
+    image: quyencl91/appheathcheck:latest
+    securityContext:
+      allowPrivilegeEscalation: false
+    resources:
+      requests:
+        cpu: 256m
+        memory: 512Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
+    volumeMounts:
+    - mountPath: "/var/www"
+      name: rox-volume
+      readOnly: true #to prevent incase your pod run under root permission
+  volumes:
+  - name: rox-volume
+    persistentVolumeClaim:
+      claimName: pvc-rox 
+---
+# Pod using the PVC
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-rwop-2
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    supplementalGroups: [4000]
+  containers:
+  - name: nginx
+    image: quyencl91/appheathcheck:latest
+    securityContext:
+      allowPrivilegeEscalation: false
+    resources:
+      requests:
+        cpu: 256m
+        memory: 512Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
+    volumeMounts:
+    - mountPath: "/var/www"
+      name: rox-volume
+      readOnly: true #to prevent incase your pod run under root permission
+  volumes:
+  - name: rox-volume
+    persistentVolumeClaim:
+      claimName: pvc-rox

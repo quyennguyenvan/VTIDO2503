@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-only-dnstool-ns
+  namespace: networkpolicytest
+spec:
+  podSelector: 
+    matchLabels:
+      run: nginx-test
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 0.0.0.0/0 # Allows traffic only from external sources
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: dns-tool
+      ports: 
+        - protocol: TCP 
+          port: 80

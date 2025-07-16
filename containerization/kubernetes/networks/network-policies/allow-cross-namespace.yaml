@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cross-namespace
+  namespace: namespaceB
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: namespaceA
+      ports:
+        - protocol: TCP
+          port: 8080

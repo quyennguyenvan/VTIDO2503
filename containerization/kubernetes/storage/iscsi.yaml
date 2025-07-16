@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-iscsi
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - mountPath: "/data"
+      name: iscsi-volume
+  volumes:
+  - name: iscsi-volume
+    iscsi:
+      targetPortal: "10.0.0.1:3260"
+      iqn: "iqn.2003-01.org.linux-iscsi.target"
+      lun: 0
+      fsType: "ext4"
+      readOnly: false
