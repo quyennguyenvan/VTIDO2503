@@ -12,5 +12,5 @@ spec:
   volumes:
   - name: nfs-volume
     nfs:
-      server: 192.168.102.11
-      path: "/exports"
+      server: 192.168.102.8
+      path: "/share"

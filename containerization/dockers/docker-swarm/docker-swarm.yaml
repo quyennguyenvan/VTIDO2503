@@ -1,5 +1,7 @@
+version: "3.8"
+
 services:
-  webhaproxy: 
+  webhaproxy:
     image: nginx:latest
     volumes:
       - ../sources/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
@@ -9,10 +11,10 @@ services:
       - api
     networks:
       - backendapi
-    
-  api: 
-    build: ../sources/webapp
-    ports: 
+
+  api:
+    image: my-webapp:latest
+    ports:
       - "5000"
     environment:
       - DATABASE_URL=postgresql://test:123abcD@database:5432/mydb
@@ -22,26 +24,27 @@ services:
       - database
     deploy:
       replicas: 3
+      restart_policy:
+        condition: on-failure
     networks:
       - backendapi
       - appdatabase
-  
+
   database:
     image: postgres:15
     restart: always
     environment:
       - POSTGRES_USER=test
       - POSTGRES_PASSWORD=123abcD
-      - POSTGRES_DB=mydb 
-    networks:
-      - appdatabase
-    
+      - POSTGRES_DB=mydb
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - appdatabase
 
 volumes:
   applogs:
-  pgdata: 
+  pgdata:
 
 networks:
   backendapi:

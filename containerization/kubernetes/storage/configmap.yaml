@@ -13,6 +13,13 @@ spec:
   containers:
   - name: nginx
     image: nginx
+    resources:
+      requests:
+        cpu: 256m
+        memory: 512Mi
+      limits:
+        cpu: 256m
+        memory: 512Mi
     volumeMounts:
     - mountPath: "/etc/config"
       name: config-volume
