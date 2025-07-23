@@ -1,5 +1,5 @@
 services:
-  webhaproxy: 
+  ingress-nginx-proxy: 
     image: nginx:latest
     volumes:
       - ../sources/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
@@ -35,7 +35,6 @@ services:
       - POSTGRES_DB=mydb 
     networks:
       - appdatabase
-    
     volumes:
       - pgdata:/var/lib/postgresql/data
 

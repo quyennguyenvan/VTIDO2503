@@ -13,7 +13,8 @@ services:
       - backendapi
 
   api:
-    image: my-webapp:latest
+    image: 127.0.0.1:5000/appapi:1
+    build: ../sources/webapp/Dockerfile
     ports:
       - "5000"
     environment:
