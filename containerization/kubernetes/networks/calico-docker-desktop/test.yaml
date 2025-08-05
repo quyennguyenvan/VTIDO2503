@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: app-api-prod-ns # hidden value namespace: default
+  name: helloworld
+  labels:
+    run: nginxapp
+spec:
+  containers:
+    - image: nginx:latest
+      name: my-alpin #unique name
+      ports:
+        - containerPort: 80
+      resources:
+        limits:
+          memory: 512Mi
+          cpu: 256m
+        requests:
+          memory: 512Mi
+          cpu: 256m
+      env:
+        - name: HELLO
+          value: "HOW ARE YOU"

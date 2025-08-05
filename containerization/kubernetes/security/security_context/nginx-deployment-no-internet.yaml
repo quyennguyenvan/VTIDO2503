@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: securepod
+  namespace: dns-tool
+  labels:
+    app: secure-app
+spec:
+  containers:
+    - name: nginx-denied-network
+      image: nginx
+      resources:
+        requests:
+          cpu: 256m
+          memory: 512Mi
+        limits:
+          cpu: 256m
+          memory: 512Mi
+      securityContext: # SecurityContext (applies only to this container)
+        # allowPrivilegeEscalation: false # Prevent privilege escalation
+        capabilities:
+          drop:
+            - ALL # Drop all capabilities
+          add:
+            - CHOWN
+            - FOWNER
+            - NET_BIND_SERVICE
+        # privileged: false # Ensure the container is not running in privileged mode
+        readOnlyRootFilesystem: true # Enforce a read-only filesystem
+        # runAsNonRoot: true # Ensure the container does not run as root
+        runAsUser: 1000 # Override Pod-level runAsUser for this container
+      volumeMounts:
+        - name: nginx-cache
+          mountPath: /var/cache/nginx
+  volumes:
+    - name: nginx-cache
+      emptyDir: {}

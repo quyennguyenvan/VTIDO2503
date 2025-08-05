@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: securepod
+  namespace: dns-tool
+  labels:
+    app: secure-app
+spec:
+  securityContext: # PodSecurityContext (applies to all containers in the Pod)
+    runAsUser: 1000 # Run all containers as user ID 1000
+    runAsGroup: 3000 # Run all containers as group ID 3000
+    fsGroup: 2000 # Group ID for file system ownership
+    supplementalGroups: [4000, 5000] # Additional groups for file system permissions
+    # seccompProfile:
+    #   type: RuntimeDefault # Use the default Seccomp profile
+    # sysctls:
+    #   - name: net.ipv4.ip_forward
+    #     value: "1" # Example of setting kernel parameters
+  containers:
+    - name: nginx1
+      image: nginx
+      resources:
+        requests:
+          cpu: 256m
+          memory: 512Mi
+        limits:
+          cpu: 256m
+          memory: 512Mi
+    - name: nginx2
+      image: quyencl91/max-weather:d855d373486c4fd9fa993935be793fcc6a726c43
+      ports:
+        - containerPort: 8086
+      resources:
+        requests:
+          cpu: 256m
+          memory: 512Mi
+        limits:
+          cpu: 256m
+          memory: 512Mi
+      securityContext: # SecurityContext (applies only to this container)
+        allowPrivilegeEscalation: false # Prevent privilege escalation
+        capabilities:
+          drop: ["ALL"] # Drop all Linux capabilities
+          add: ["NET_BIND_SERVICE"] # Allow binding ports < 1024
+        privileged: false # Ensure the container is not running in privileged mode
+        readOnlyRootFilesystem: false # Enforce a read-only filesystem
+        runAsNonRoot: true # Ensure the container does not run as root
+        runAsUser: 1001 # Override Pod-level runAsUser for this container

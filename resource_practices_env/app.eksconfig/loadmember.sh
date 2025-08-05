@@ -29,7 +29,7 @@ while read -r arn username; do
     --kubernetes-groups Viewers \
     --profile "$AWS_PROFILE" \
     --region "$AWS_REGION" \
-    --no-cli-pager
+    --no-cli-pager || true
 
     aws eks associate-access-policy \
     --cluster-name "$EKS_CLUSTER_NAME" \
@@ -38,6 +38,6 @@ while read -r arn username; do
     --principal-arn "$arn" \
     --access-scope type=cluster \
     --policy-arn "$POLICY_ARN" \
-    --no-cli-pager
+    --no-cli-pager || true
 
 done <<< "$USERS_LIST"
