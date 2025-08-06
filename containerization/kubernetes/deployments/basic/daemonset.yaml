@@ -11,16 +11,12 @@ spec:
       app: nginx_daemonset
   template:
     metadata:
-      labels: #label marker to identifier the deployment references
+      labels:
         app: nginx_daemonset
     spec:
-      nodeSelector:
-        "kubernetes.io/hostname": aks-nodepool-13859459-vmss000000
       containers:
-        - image: nginx:latest
-          name: my-alpin
-          ports:
-            - containerPort: 8080
+        - image: nginx:1.29.0-alpine
+          name: app-1
           resources:
             limits:
               memory: 512Mi
@@ -29,5 +25,5 @@ spec:
               memory: 512Mi
               cpu: 256m
           env:
-            - name: HELLO
+            - name: HELLO2
               value: "HOW ARE YOU"

@@ -13,7 +13,7 @@ kind: Deployment
 metadata:
   name: critical-app
 spec:
-  replicas: 3
+  replicas: 20
   selector:
     matchLabels:
       app: critical
@@ -24,17 +24,16 @@ spec:
     spec:
       priorityClassName: high-priority
       containers:
-        - name: random
-          image: nginx:latest
-          ports:
-            - containerPort: 80
+        - name: stress
+          image: vish/stress
+          args:
+            - -cpus
+            - "1"
           resources:
-            limits:
-              memory: 512Mi
-              cpu: 256m
             requests:
-              memory: 512Mi
-              cpu: 256m
-          env:
-            - name: HELLO
-              value: "HOW ARE YOU"
+              cpu: 1000m
+              memory: 256Mi
+            limits:
+              cpu: 1000m
+              memory: 256Mi
+
