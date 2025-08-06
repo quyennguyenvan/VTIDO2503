@@ -1,35 +1,29 @@
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: nginx
-# ---
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: test
+  namespace: nginx
   name: nginx-deployment
   labels:
     app: nginx_haproxy
     important: "true"
 spec:
-  replicas: 1 #default 1 #this will be overwrite if have HPA ref to
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: nginx_haproxy
   template:
     metadata:
-      labels: #label marker to identifier the deployment references
+      labels:
         app: nginx_haproxy
     spec:
-      volumes:
-        - name: cache-volume
-          emptyDir: {}
       containers:
-        - image: nginx:1.25
+        - image: nginx:1.29.0-alpine
           name: app-1
-          ports:
-            - containerPort: 8080
           resources:
             limits:
               memory: 512Mi
@@ -37,32 +31,6 @@ spec:
             requests:
               memory: 512Mi
               cpu: 256m
-          volumeMounts:
-            - mountPath: "/cache"
-              name: cache-volume
-          env:
-            - name: HELLO2
-              value: "HOW ARE YOU"
-        - image: alpine:3.20
-          name: app-2
-          command:
-            [
-              "/bin/sh",
-              "-c",
-              "while true; do echo Hello from Alpine; sleep 10; done",
-            ]
-          ports:
-            - containerPort: 8081
-          resources:
-            limits:
-              memory: 512Mi
-              cpu: 256m
-            requests:
-              memory: 512Mi
-              cpu: 256m
-          volumeMounts:
-            - mountPath: "/cache"
-              name: cache-volume
           env:
             - name: HELLO2
               value: "HOW ARE YOU"

@@ -1,26 +1,20 @@
-apiVersion: v1 #version of API - current supporting
-kind: Namespace # kind of resources
-metadata: # describe information or data of resources
-  name: hihi
----
 apiVersion: v1
 kind: Pod
 metadata:
-  namespace: hihi # hidden value namespace: default
+  namespace: nginx # hidden value namespace: default
   name: helloworld
 spec:
   containers:
-    - image: nginx:latest
-      name: my-alpin #unique name
-      ports:
-        - containerPort: 8080
+    - name: nginx
+      image: "nginx"
       resources:
-        limits:
-          memory: 512Mi
-          cpu: 256m
         requests:
+          cpu: 512m
           memory: 512Mi
-          cpu: 256m
+        limits:
+          cpu: 512m
+          memory: 512Mi
       env:
-        - name: HELLO
-          value: "HOW ARE YOU"
+        - name: MESSAGE
+          value: "hello world"
+  restartPolicy: Never

@@ -1,20 +1,25 @@
-
-apiVersion: batch/v1 
-kind: Job 
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: hellojob 
-  namespace: default 
+  name: hellojob
+  namespace: nginx
 spec:
   backoffLimit: 3
-  ttlSecondsAfterFinished:  120
-  template: 
-    spec: 
+  ttlSecondsAfterFinished: 120
+  template:
+    spec:
+      volumes:
+        - name: cache-volume
+          emptyDir: {}
       containers:
-        - name: hello
+        - name: ubuntu
           image: "ubuntu:14.04"
           env:
-          - name: MESSAGE
-            value: "hello world"
-          command: ["/bin/sh","-c"]
-          args: ["/bin/echo \"${MESSAGE}\""]
+            - name: MESSAGE
+              value: "hello world"
+          command: ["/bin/sh", "-c"]
+          args: ['/bin/echo "${MESSAGE}"']
+          volumeMounts:
+            - mountPath: "/cache"
+              name: cache-volume
       restartPolicy: Never
