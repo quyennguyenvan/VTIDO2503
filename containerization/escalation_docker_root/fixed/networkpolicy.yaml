@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: app_restrict_egress
+  namespace: escalation
+spec:
+  podSelector:
+    app: escalation-app
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 53
+
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0 #this must change to private cidr network example 10.20.0.0/28
+      ports:
+        - protocol: TCP
+          port: 5000

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: escalation
+  name: escalation-app
+  labels:
+    app: escalation-app
+    important: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: escalation-app
+  template:
+    metadata:
+      labels:
+        app: escalation-app
+    spec:
+      volumes:
+        - name: appconfig
+          configMap:
+            name: appconfig
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: escalation-app
+          image: quyencl91/escalation:4 #you can replace your image
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 512Mi
+              cpu: "1"
+          volumeMounts:
+            - name: appconfig
+              mountPath: /config/appconfig.json
+              subPath: appconfig.json
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            privileged: false
+            capabilities:
+              drop:
+                - ALL
+              add: 
+                - CAP_

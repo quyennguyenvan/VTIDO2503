@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: escalation
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: appconfig
+  namespace: escalation
+data:
+  appconfig.json: |
+    {
+        "DATABASE_URL": "postgres://postgres:postgres@db:5432/postgres"m
+        "AWS_API_KEY": "123sECRET#1",
+        "AWS_API_SECRET": "123sECRET#2",
+        "AWS_API_REGION": "us-east-1",
+        "PAYPAL_KEY": "SECRETkEY123X25@",
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: escalation
+  name: escalation-app
+  labels:
+    app: escalation-app
+    important: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: escalation-app
+  template:
+    metadata:
+      labels:
+        app: escalation-app
+    spec:
+      volumes:
+        - name: appconfig
+          configMap:
+            name: appconfig
+      containers:
+        - name: escalation-app
+          image: quyencl91/escalation:4 #you can replace your image
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 512Mi
+              cpu: "1"
+          volumeMounts:
+            - name: appconfig
+              mountPath: /config/appconfig.json
+              subPath: appconfig.json
+              readOnly: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  namespace: escalation
+spec:
+  type: NodePort
+  selector:
+    app: escalation-app
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30007
