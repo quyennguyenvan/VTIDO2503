@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   namespace: escalation
   name: escalation-app
+  # annotations:
+  #   container.apparmor.security.beta.kubernetes.io/escalation-app: my-custom-profile
   labels:
     app: escalation-app
     important: "true"
@@ -20,13 +22,22 @@ spec:
         - name: appconfig
           configMap:
             name: appconfig
+        - name: uploadsdir
+          emptyDir: {}
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: init
+          image: busybox:1.28
+          command:
+            ["sh", "-c", "chown -R 1000:1000 /uploads && chmod 755 /uploads"]
+          volumeMounts:
+            - name: uploadsdir
+              mountPath: /uploads
       containers:
         - name: escalation-app
-          image: quyencl91/escalation:4 #you can replace your image
+          image: quyencl91/escalation:7 #you can replace your image
           ports:
             - containerPort: 5000
           resources:
@@ -41,12 +52,15 @@ spec:
               mountPath: /config/appconfig.json
               subPath: appconfig.json
               readOnly: true
+            - name: uploadsdir
+              mountPath: /uploads
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
             runAsNonRoot: true
             privileged: false
+            runAsUser: 1000
+            runAsGroup: 1000
             capabilities:
               drop:
                 - ALL
-              add: 
-                - CAP_

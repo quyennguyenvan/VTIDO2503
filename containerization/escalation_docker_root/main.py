@@ -4,7 +4,7 @@ import os
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "/uploads" 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True) 
+# os.makedirs(UPLOAD_FOLDER, exist_ok=True) 
 
 app_configuration="/config/appconfig.json"
 
@@ -17,6 +17,7 @@ def upload_file():
     if file.filename == '':
         return {"error": "No selected file"}, 400 
 
+    print(f'whoami UID: {os.getuid()} GID: {os.getgid()}')
     file.save(f"{UPLOAD_FOLDER}/{file.filename}")
     return {"message": "File uploaded successfully"}, 200
 

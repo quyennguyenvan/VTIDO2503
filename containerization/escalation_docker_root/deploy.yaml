@@ -15,7 +15,7 @@ data:
         "AWS_API_KEY": "123sECRET#1",
         "AWS_API_SECRET": "123sECRET#2",
         "AWS_API_REGION": "us-east-1",
-        "PAYPAL_KEY": "SECRETkEY123X25@",
+        "PAYPAL_KEY": "SE1111ETkEY123X25@",
     }
 ---
 apiVersion: apps/v1

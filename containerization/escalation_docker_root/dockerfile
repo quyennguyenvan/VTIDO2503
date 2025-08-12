@@ -9,9 +9,11 @@ COPY ./requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 
-RUN mkdir uploads && chmod -R 777 uploads
+# RUN mkdir uploads && chmod -R 777 uploads
 
 EXPOSE 5000
+
+USER 1000
 
 COPY . /app
 
