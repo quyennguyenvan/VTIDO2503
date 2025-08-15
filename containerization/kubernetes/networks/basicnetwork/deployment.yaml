@@ -1,30 +1,95 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  nginx
+  name: nginx
   namespace: nginx
   labels:
-    app:  nginx
+    app: nginx-app-deployment
 spec:
   replicas: 4
-  selector: 
+  selector:
     matchLabels:
-      app: nginx
+      app: nginx-app-deployment
   template:
     metadata:
       labels:
-        app:  nginx
+        app: nginx-app-deployment
     spec:
       containers:
-      - image: quyencl91/appheathcheck:latest
-        name: nginx
-        resources:
-          requests:
-            cpu: "256m"
-            memory: "512M"
-          limits: 
-            cpu: "256m"
-            memory: "512M"
-        ports:
-        - containerPort: 8080
-          name:  nginx
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxapp-svc-deployment
+  namespace: nginx
+spec:
+  selector:
+    app: nginx-app-deployment
+  ports:
+    - port: 8080
+      targetPort: 80
+      name: port8080
+    - port: 80
+      targetPort: 80
+      name: port80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxapp-svc-deployment-nodeport
+  namespace: nginx
+spec:
+  selector:
+    app: nginx-app-deployment
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 80
+      nodePort: 30036
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxapp-svc-deployment-loadbalancer
+  namespace: nginx
+spec:
+  selector:
+    app: nginx-app-deployment
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 80
+      protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: nginx
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginxapp-svc-deployment
+                port:
+                  number: 8080
