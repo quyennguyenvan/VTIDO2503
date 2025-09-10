@@ -1,0 +1,15 @@
+# PersistentVolume (PV)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-rox-practices
+  namespace: test
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: "/Users/nulled/Library/CloudStorage/OneDrive-Personal/Projects/trash/VTIDO2503/containerization/kubernetes/storage/tmp/"
