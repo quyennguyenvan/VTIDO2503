@@ -9,9 +9,9 @@ spec:
   accessModes:
     - ReadOnlyMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: default
+  storageClassName: hostpathpv
   hostPath:
-    path: "/Users/nulled/OneDrive/Projects/VTI/demo/kuberentes/storages/tmp"
+    path: "/Users/nulled/Library/CloudStorage/OneDrive-Personal/Projects/trash/VTIDO2503/containerization/kubernetes/storage/tmp"
 ---
 # PersistentVolumeClaim (PVC)
 apiVersion: v1
@@ -26,7 +26,7 @@ spec:
       storage: 1Gi
   storageClassName: default
 ---
- # Pod using the PVC
+# Pod using the PVC
 apiVersion: v1
 kind: Pod
 metadata:
@@ -38,25 +38,25 @@ spec:
     fsGroup: 2000
     supplementalGroups: [4000]
   containers:
-  - name: nginx
-    image: quyencl91/appheathcheck:latest
-    securityContext:
-      allowPrivilegeEscalation: false
-    resources:
-      requests:
-        cpu: 256m
-        memory: 512Mi
-      limits:
-        cpu: 256m
-        memory: 512Mi
-    volumeMounts:
-    - mountPath: "/var/www"
-      name: rox-volume
-      readOnly: true #to prevent incase your pod run under root permission
+    - name: nginx
+      image: quyencl91/appheathcheck:latest
+      securityContext:
+        allowPrivilegeEscalation: false
+      resources:
+        requests:
+          cpu: 256m
+          memory: 512Mi
+        limits:
+          cpu: 256m
+          memory: 512Mi
+      volumeMounts:
+        - mountPath: "/var/www"
+          name: rox-volume
+          readOnly: true #to prevent incase your pod run under root permission
   volumes:
-  - name: rox-volume
-    persistentVolumeClaim:
-      claimName: pvc-rox 
+    - name: rox-volume
+      persistentVolumeClaim:
+        claimName: pvc-rox
 ---
 # Pod using the PVC
 apiVersion: v1
@@ -70,22 +70,22 @@ spec:
     fsGroup: 2000
     supplementalGroups: [4000]
   containers:
-  - name: nginx
-    image: quyencl91/appheathcheck:latest
-    securityContext:
-      allowPrivilegeEscalation: false
-    resources:
-      requests:
-        cpu: 256m
-        memory: 512Mi
-      limits:
-        cpu: 256m
-        memory: 512Mi
-    volumeMounts:
-    - mountPath: "/var/www"
-      name: rox-volume
-      readOnly: true #to prevent incase your pod run under root permission
+    - name: nginx
+      image: quyencl91/appheathcheck:latest
+      securityContext:
+        allowPrivilegeEscalation: false
+      resources:
+        requests:
+          cpu: 256m
+          memory: 512Mi
+        limits:
+          cpu: 256m
+          memory: 512Mi
+      volumeMounts:
+        - mountPath: "/var/www"
+          name: rox-volume
+          readOnly: true #to prevent incase your pod run under root permission
   volumes:
-  - name: rox-volume
-    persistentVolumeClaim:
-      claimName: pvc-rox
+    - name: rox-volume
+      persistentVolumeClaim:
+        claimName: pvc-rox

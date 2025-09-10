@@ -1,3 +1,8 @@
+apiVersion: v1 #version of API - current supporting
+kind: Namespace # kind of resources
+metadata: # describe information or data of resources
+  name: nginx
+---
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
@@ -16,6 +21,25 @@ spec:
         app: nginx-replicas
         app_kind: backend_api
     spec:
+<<<<<<< HEAD
+      # nodeSelector:
+      #   "kubernetes.io/hostname": aks-nodepool-13859459-vmss000000
+      containers:
+        - image: busybox:latest
+          name: my-alpin
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: 256m
+            requests:
+              memory: 512Mi
+              cpu: 256m
+          env:
+            - name: HELLO
+              value: "HOW ARE YOU"
+=======
       containers:
         - name: nginx
           image: nginx
@@ -29,3 +53,4 @@ spec:
           env:
             - name: MESSAGE
               value: "hello world"
+>>>>>>> master

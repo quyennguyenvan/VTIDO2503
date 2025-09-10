@@ -11,19 +11,12 @@ metadata:
   name: pod-configmap
 spec:
   containers:
-  - name: nginx
-    image: nginx
-    resources:
-      requests:
-        cpu: 256m
-        memory: 512Mi
-      limits:
-        cpu: 256m
-        memory: 512Mi
-    volumeMounts:
-    - mountPath: "/etc/config"
-      name: config-volume
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - mountPath: "/etc/config"
+          name: config-volume
   volumes:
-  - name: config-volume
-    configMap:
-      name: example-config
+    - name: config-volume
+      configMap:
+        name: example-config

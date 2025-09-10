@@ -1,0 +1,8 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  namespace: test
+  name: manual
+provisioner: file.csi.azure.com
+volumeBindingMode: Immediate
+allowVolumeExpansion: false
