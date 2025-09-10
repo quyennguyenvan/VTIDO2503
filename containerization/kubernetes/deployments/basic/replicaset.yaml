@@ -21,6 +21,7 @@ spec:
         app: nginx-replicas
         app_kind: backend_api
     spec:
+<<<<<<< HEAD
       # nodeSelector:
       #   "kubernetes.io/hostname": aks-nodepool-13859459-vmss000000
       containers:
@@ -38,3 +39,18 @@ spec:
           env:
             - name: HELLO
               value: "HOW ARE YOU"
+=======
+      containers:
+        - name: nginx
+          image: nginx
+          resources:
+            requests:
+              cpu: 512m
+              memory: 512Mi
+            limits:
+              cpu: 512m
+              memory: 512Mi
+          env:
+            - name: MESSAGE
+              value: "hello world"
+>>>>>>> master

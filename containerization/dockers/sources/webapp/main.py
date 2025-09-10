@@ -4,6 +4,8 @@ from flask_cors import CORS
 
 import psycopg2
 import os
+import socket 
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -16,7 +18,8 @@ def index():
         cursor.execute("SELECT version();")
         db_version = cursor.fetchone()
         cursor.close()
-        return f"database connection: {db_version}, hostname: {server_id}"
+        hostname = socket.gethostname()
+        return f"database connection: {db_version},source come from hostname: {hostname}"
     except Exception as err: 
         print(f"Throw execptions as: {err}")
         pass

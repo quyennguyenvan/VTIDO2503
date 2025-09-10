@@ -24,12 +24,13 @@ spec:
                   - key: topology.kubernetes.io/zone
                     operator: In
                     values:
-                      - ap-southeast-1d
+                      - ap-southeast-1b
+                      - ap-southeast-1c
                   - key: kubernetes.io/hostname
                     operator: In
                     values:
-                      - ip-10-0-1-226.ap-southeast-1.compute.internal
-                      - ip-10-0-14-124.ap-southeast-1.compute.internal
+                      - ip-10-0-31-63.ap-southeast-1.compute.internal
+                      - ip-10-0-36-73.ap-southeast-1.compute.internal
 
           #soft rule
           # preferredDuringSchedulingIgnoredDuringExecution:

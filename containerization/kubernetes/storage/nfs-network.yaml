@@ -4,13 +4,13 @@ metadata:
   name: pod-nfs
 spec:
   containers:
-  - name: nginx
-    image: nginx
-    volumeMounts:
-    - mountPath: "/data"
-      name: nfs-volume
+    - name: nginx
+      image: nginx
+      volumeMounts:
+        - mountPath: "/data"
+          name: nfs-volume
   volumes:
-  - name: nfs-volume
-    nfs:
-      server: 192.168.102.11
-      path: "/exports"
+    - name: nfs-volume
+      nfs:
+        server: 192.168.102.11
+        path: "/exports"

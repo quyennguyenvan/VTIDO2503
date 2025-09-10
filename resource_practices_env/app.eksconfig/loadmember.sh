@@ -9,7 +9,7 @@ YELLOW="\033[1;33m"
 CYAN="\033[0;36m"
 NC="\033[0m"
 
-AWS_PROFILE="quyennv-vti-0305-devops"
+AWS_PROFILE="quyennv-vti-0405-devops"
 AWS_REGION="ap-southeast-1"
 EKS_CLUSTER_NAME="qnveks"
 USERS_LIST=$(aws --profile $AWS_PROFILE iam list-users --query "Users[*].{Username:UserName, ARN:Arn}" --output text)
@@ -29,7 +29,7 @@ while read -r arn username; do
     --kubernetes-groups Viewers \
     --profile "$AWS_PROFILE" \
     --region "$AWS_REGION" \
-    --no-cli-pager
+    --no-cli-pager || true
 
     aws eks associate-access-policy \
     --cluster-name "$EKS_CLUSTER_NAME" \
@@ -38,6 +38,6 @@ while read -r arn username; do
     --principal-arn "$arn" \
     --access-scope type=cluster \
     --policy-arn "$POLICY_ARN" \
-    --no-cli-pager
+    --no-cli-pager || true
 
 done <<< "$USERS_LIST"

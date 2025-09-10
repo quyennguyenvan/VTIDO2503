@@ -1,0 +1,10 @@
+apiversion: operation.tiger.io/v1
+kind: Installation
+metadata:
+  name: default
+spec:
+  calicoNetwork:
+    bgp: Disabled
+    ipPools: []
+  cni:
+    type: AmazonVPC

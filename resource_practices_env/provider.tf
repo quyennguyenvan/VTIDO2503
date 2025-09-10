@@ -14,6 +14,10 @@ terraform {
 
 provider "aws" {
   region  = "ap-southeast-1" # switch other ap-southeast-1 or
+<<<<<<< HEAD
   profile = "quyennv-vti-0305-devops"
+=======
+  profile = "quyennv-vti-0405-devops"
+>>>>>>> master
 }
 provider "random" {}

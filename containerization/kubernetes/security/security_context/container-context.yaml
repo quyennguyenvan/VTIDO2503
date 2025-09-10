@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-container-pod
+  namespace: dns-tool
+spec:
+  containers:
+    - name: no-security
+      image: busybox
+      resources:
+        requests:
+          cpu: 256m
+          memory: 512Mi
+        limits:
+          cpu: 256m
+          memory: 512Mi
+      command: ["sleep", "3600"]
+    - name: secure-container
+      image: busybox
+      resources:
+        requests:
+          cpu: 256m
+          memory: 512Mi
+        limits:
+          cpu: 256m
+          memory: 512Mi
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
+        runAsNonRoot: false
+        readOnlyRootFilesystem: true
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop: ["ALL"] # Drops all unnecessary privileges
+      command: ["sleep", "3600"]

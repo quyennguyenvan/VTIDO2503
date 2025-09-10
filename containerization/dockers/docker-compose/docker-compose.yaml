@@ -1,8 +1,8 @@
 services:
-  webhaproxy: 
+  ingress-nginx-proxy: 
     image: nginx:latest
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../sources/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "8080:80"
     depends_on:
@@ -11,7 +11,7 @@ services:
       - backendapi
     
   api: 
-    build: ./webapp
+    build: ../sources/webapp
     ports: 
       - "5000"
     environment:
@@ -35,7 +35,6 @@ services:
       - POSTGRES_DB=mydb 
     networks:
       - appdatabase
-    
     volumes:
       - pgdata:/var/lib/postgresql/data
 

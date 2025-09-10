@@ -13,7 +13,12 @@ metadata:
     app: nginx_haproxy
     important: "true"
 spec:
-  replicas: 5 #default 1 #this will be overwrite if have HPA ref to
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: nginx_haproxy
